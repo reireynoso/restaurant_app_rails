@@ -21,6 +21,14 @@ class Api::V1::UsersController < ApplicationController
         render json: {reviews: reviews, ratings: ratings}
     end
 
+    def update_user
+        byebug
+    end
+
+    def change_password
+        byebug
+    end
+
     private
 
     def user_params
