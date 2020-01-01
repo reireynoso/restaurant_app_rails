@@ -24,13 +24,25 @@ class Api::V1::UsersController < ApplicationController
     def update_user
         # byebug
         # puts params[:photo_url] == nil
-        if params[:username] == ""
+        if params[:username] != "" && params[:photo_url] != nil
+            session_user.update(username: params[:username], photo_url: params[:photo_url])
+            update_user_json
+        elsif params[:username] == "" && params[:photo_url] != nil
             session_user.update(photo_url: params[:photo_url])
-        elsif params[:photo_url] == nil
-            session_user.update(username: params[:username])
-            puts session_user
+            update_user_json
+        elsif params[:username] != "" && params[:photo_url] == nil 
+            existing_user = User.find_by(username: params[:username])
+                if existing_user
+                    render json: {errors: ["Username is taken"]}
+                else
+                    session_user.update(username: params[:username])
+                    update_user_json
+                end
+            # puts session_user
+        else
+            render json: {errors: ["No changes made."]}
         end
-        render json: {user: UserSerializer.new(session_user), success: "reached regular update path"}
+        
     end
 
     def change_password
@@ -39,6 +51,10 @@ class Api::V1::UsersController < ApplicationController
     end
 
     private
+
+    def update_user_json
+        render json: {user: UserSerializer.new(session_user), success: "reached regular update path"}
+    end
 
     def user_params
         params.permit(:username, :password, :photo_url)
