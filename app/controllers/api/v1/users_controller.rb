@@ -77,7 +77,7 @@ class Api::V1::UsersController < ApplicationController
     end
 
     def update_user_json
-        render json: {user: UserSerializer.new(session_user), success: "reached regular update path"}
+        render json: {user: UserSerializer.new(session_user), success: ["Updated Successfully"]}
     end
 
     def user_params
