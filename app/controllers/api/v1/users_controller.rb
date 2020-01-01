@@ -22,11 +22,20 @@ class Api::V1::UsersController < ApplicationController
     end
 
     def update_user
-        byebug
+        # byebug
+        # puts params[:photo_url] == nil
+        if params[:username] == ""
+            session_user.update(photo_url: params[:photo_url])
+        elsif params[:photo_url] == nil
+            session_user.update(username: params[:username])
+            puts session_user
+        end
+        render json: {user: UserSerializer.new(session_user), success: "reached regular update path"}
     end
 
     def change_password
-        byebug
+        # byebug
+        render json: {success: "reached password path"}
     end
 
     private
