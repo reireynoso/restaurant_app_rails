@@ -53,7 +53,12 @@ class Api::V1::UsersController < ApplicationController
 
     def change_password
         # byebug
-        render json: {success: "reached password path"}
+        if(session_user.authenticate(params[:oldPassword]))
+            session_user.update(password_params)
+            render json: {user: UserSerializer.new(session_user), success: ["Password changed successfully."]}
+        else
+            render json: {errors: ["Old Password did not match. Password not changed."]}
+        end
     end
 
     private
@@ -78,6 +83,10 @@ class Api::V1::UsersController < ApplicationController
 
     def update_user_json
         render json: {user: UserSerializer.new(session_user), success: ["Updated Successfully"]}
+    end
+
+    def password_params
+        params.permit(:password)
     end
 
     def user_params
