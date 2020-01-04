@@ -43,6 +43,6 @@ class ApplicationController < ActionController::API
     private
 
     def secret
-        "LongAssReturnSecretK3y@@##"
+        ENV["JWT_SECRET"]
     end
 end
