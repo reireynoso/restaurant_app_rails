@@ -27,3 +27,5 @@
 /vendor/fake_seeds.rb
 
 /vendor/.env
+
+Gemfile.lock
